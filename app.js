@@ -55,10 +55,17 @@ $(function(){
 
 
   // keypress
+  var keyBoxClicked = '';
+  $(".keyBoxes").on('click',function(event){
+    console.log(event.target);
+    keyBoxClicked = '#' + event.target.id;
+    console.log(keyBoxClicked);
+  });
+
   $(document).keydown(function(key){
     // console.log(key.which);
-    var keyX = parseInt($("#keyBox").css("left"));
-    var keyY = parseInt($("#keyBox").css("top"));
+    var keyX = parseInt($(keyBoxClicked).css("left"));
+    var keyY = parseInt($(keyBoxClicked).css("top"));
     switch(key.which){
       case 38:
         keyY -= 15;
@@ -77,7 +84,7 @@ $(function(){
     var keyYString = keyY + "px";
     // console.log("keyXString",keyXString);
     // console.log("keyYString",keyYString);
-    $("#keyBox").css({"left": keyXString,"top":keyYString});
+    $(keyBoxClicked).css({"left": keyXString,"top":keyYString});
   });
 
 
