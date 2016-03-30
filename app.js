@@ -62,6 +62,34 @@ $(function(){
     //console.log(carClicked);
   });
 
+  // construct building objects
+  var buildingArray = [];
+  $(".building").each(function(index){
+    var tempX = $(this).css("left");
+    var tempY = $(this).css("top");
+    var tempWidth = $(this).css("width");
+    var tempHeight = $(this).css("height");
+    var tempBuilding = new Building(tempX, tempY, tempWidth, tempHeight);
+
+    buildingArray.push(tempBuilding);
+  });
+
+
+  // var buildingElements = $(".building");
+  // var buildingArray = [];
+  // for(var it = 0; it < buildingElements.length; it++){
+  //   var tempX = buildingElements[it].css("left");
+  //   var tempY = buildingElements[it].css("top");
+  //   var tempWidth = buildingElements[it].css("width");
+  //   var tempHeight = buildingElements[it].css("height");
+  //
+  //   var tempBuilding = new Building(tempX, tempY, tempWidth, tempHeight);
+  //
+  //   buildingArray.push(tempBuilding);
+  // }
+
+  console.log("buildingArray",buildingArray);
+
   // car movement
   var collisionDetected = false;
   $(document).keydown(function(key){
@@ -141,7 +169,6 @@ $(function(){
     // console.log('car',car);
     // console.log('building',building);
 
-
     if(
       car.x < building.x + building.width &&
       car.x + car.width > building.x &&
@@ -162,6 +189,14 @@ $(function(){
     $("#buildingWidth").html(building.width);
     $("#buildingHeight").html(building.height);
   });
+
+
+  function Building(x, y, width, height){
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
 
 
 
