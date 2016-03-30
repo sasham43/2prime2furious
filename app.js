@@ -13,6 +13,9 @@ $(function(){
 //      cars
 ///////////////////////////////
 
+  // initialize coinCount
+  var coinCount = 0;
+
   // put cars at start
   var startPosX = parseInt($(".car-start").css("left"));
   var startPosY = parseInt($(".car-start").css("top"));
@@ -28,13 +31,6 @@ $(function(){
     carClicked = '#' + event.target.id; // grab id and add # selector for jQuery
     //console.log(carClicked);
   });
-
-  // press 'n' to create new building
-
-  $(document).keydown(function(key){
-
-  });
-
 
   // click to move buildings
   var buildingSelected = '';
@@ -141,6 +137,32 @@ $(function(){
     var keyYString = keyY + "px";
     $(carClicked).css({"left": keyXString,"top":keyYString});
 
+    // build coin object
+    var coin = {
+      x: parseInt($("#coin").css("left")),
+      y: parseInt($("#coin").css("top")),
+      width: parseInt($("#coin").css("width")),
+      height: parseInt($("#coin").css("height"))
+    }
+
+    // console.log("coin position", coin)
+
+    // coin collection
+    var collide1 = (car.x < coin.x + coin.width);
+    var collide2 = (car.x + car.width > coin.x);
+    var collide3 = (car.y < coin.y + coin.height);
+    var collide4 = (car.y + car.height > coin.y);
+    // console.log(collide1, collide2, collide3, collide4);
+    if (collide1 &&
+      collide2 &&
+      collide3 &&
+      collide4
+    ){
+      coinCount++;
+      $("#coin-count").html(coinCount);
+      $("#coin").remove();
+    }
+
     for(var kt = 0; kt < buildingArray.length; kt++){
       // console.log('buildingArray[kt]',buildingArray[kt]);
       buildingArray[kt].isCollided = function(){
@@ -157,8 +179,7 @@ $(function(){
       }
     }
 
-    // create new buildings
-    // console.log(key.which);
+    // create new buildings with 'n'
     var numBuildings = buildingArray.length;
     var newID = numBuildings+1;
     if(key.which == 78){
