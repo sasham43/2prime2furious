@@ -66,8 +66,6 @@ $(function(){
     $(coinSelected).css({"left":(event.pageX)-10, "top":(event.pageY)-10});
   });
 
-  // console.log("buildingArray",buildingArray);
-
   // car movement
   var collisionDetected = false;
   $(document).keydown(function(key){
@@ -89,6 +87,18 @@ $(function(){
       var tempBuilding = new Building(tempX, tempY, tempWidth, tempHeight);
 
       buildingArray.push(tempBuilding);
+    });
+
+    var coinArray = [];
+    $(".coins").each(function(index){
+      var tempX = parseInt($(this).css("left"));
+      var tempY = parseInt($(this).css("top"));
+      var tempWidth = parseInt($(this).css("width"));
+      var tempHeight = parseInt($(this).css("height"));
+      var tempID = "#coin" + (index+1);
+      var tempCoin = new Coin(tempX, tempY, tempWidth, tempHeight, tempID);
+
+      coinArray.push(tempCoin);
     });
 
     // var keyX = parseInt($(carClicked).css("left"));
@@ -154,30 +164,47 @@ $(function(){
     $(carClicked).css({"left": carXString,"top": carYString});
 
     // build coin object
-    var coin = {
-      x: parseInt($("#coin").css("left")),
-      y: parseInt($("#coin").css("top")),
-      width: parseInt($("#coin").css("width")),
-      height: parseInt($("#coin").css("height"))
-    }
+    // var coin = {
+    //   x: parseInt($("#coin").css("left")),
+    //   y: parseInt($("#coin").css("top")),
+    //   width: parseInt($("#coin").css("width")),
+    //   height: parseInt($("#coin").css("height"))
+    // }
 
     // console.log("coin position", coin)
 
+    // console.log(coinArray);
     // coin collection
-    var collide1 = (car.x < coin.x + coin.width);
-    var collide2 = (car.x + car.width > coin.x);
-    var collide3 = (car.y < coin.y + coin.height);
-    var collide4 = (car.y + car.height > coin.y);
-    // console.log(collide1, collide2, collide3, collide4);
-    if (collide1 &&
-      collide2 &&
-      collide3 &&
-      collide4
-    ){
-      coinCount++;
-      $("#coin-count").html(coinCount);
-      $("#coin").remove();
+    for(var ct = 0; ct < coinArray.length; ct++){
+      coinArray[ct].isCollected = function(){
+        var collected = car.x < this.x + this.width &&
+        car.x + car.width > this.x &&
+        car.y < this.y + this.height &&
+        car.y + car.height > this.y;
+
+        return collected;
+      }
+      if(coinArray[ct].isCollected()){
+        coinCount++;
+        $("#coin-count").html(coinCount);
+        // removing coins messes with the coin array and thus the creation of coin ids for the html elements
+        $(coinArray[ct].id).remove();
+      }
     }
+    // var collide1 = (car.x < coin.x + coin.width);
+    // var collide2 = (car.x + car.width > coin.x);
+    // var collide3 = (car.y < coin.y + coin.height);
+    // var collide4 = (car.y + car.height > coin.y);
+    // // console.log(collide1, collide2, collide3, collide4);
+    // if (collide1 &&
+    //   collide2 &&
+    //   collide3 &&
+    //   collide4
+    // ){
+    //   coinCount++;
+    //   $("#coin-count").html(coinCount);
+    //   $("#coin").remove();
+    // }
 
     for(var kt = 0; kt < buildingArray.length; kt++){
       // console.log('buildingArray[kt]',buildingArray[kt]);
@@ -202,6 +229,13 @@ $(function(){
       $(".building-container").append("<div class=\"building\" id=\"building" + newID + "\"></div>");
     }
 
+    console.log(key.which);
+    var numCoins = coinArray.length;
+    var coinID = numCoins+1;
+    if(key.which == 67){
+      $(".coin-container").append("<div class=\"coins\" id=\"coin" + coinID + "\"></div>");
+    }
+
     // debug console
     // $("#carX").html(car.x);
     // $("#carY").html(car.y);
@@ -220,6 +254,15 @@ $(function(){
     this.y = y;
     this.width = width;
     this.height = height;
+  }
+
+  // coin constructor
+  function Coin(x, y, width, height, id){
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.id = id;
   }
 
 
