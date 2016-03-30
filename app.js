@@ -54,6 +54,12 @@ $(function(){
   });
 
 
+//////////////////////////////
+//      cars
+///////////////////////////////
+
+
+
   // keypress
   var carClicked = '#car1';
   $(".cars").on('click',function(event){
@@ -65,61 +71,55 @@ $(function(){
   // construct building objects
   var buildingArray = [];
   $(".building").each(function(index){
-    var tempX = $(this).css("left");
-    var tempY = $(this).css("top");
-    var tempWidth = $(this).css("width");
-    var tempHeight = $(this).css("height");
+    var tempX = parseInt($(this).css("left"));
+    var tempY = parseInt($(this).css("top"));
+    var tempWidth = parseInt($(this).css("width"));
+    var tempHeight = parseInt($(this).css("height"));
     var tempBuilding = new Building(tempX, tempY, tempWidth, tempHeight);
 
     buildingArray.push(tempBuilding);
   });
 
-
-  // var buildingElements = $(".building");
-  // var buildingArray = [];
-  // for(var it = 0; it < buildingElements.length; it++){
-  //   var tempX = buildingElements[it].css("left");
-  //   var tempY = buildingElements[it].css("top");
-  //   var tempWidth = buildingElements[it].css("width");
-  //   var tempHeight = buildingElements[it].css("height");
-  //
-  //   var tempBuilding = new Building(tempX, tempY, tempWidth, tempHeight);
-  //
-  //   buildingArray.push(tempBuilding);
-  // }
-
-  console.log("buildingArray",buildingArray);
+  // console.log("buildingArray",buildingArray);
 
   // car movement
   var collisionDetected = false;
   $(document).keydown(function(key){
+    // build car object
+    var car = {
+      x: parseInt($(carClicked).css("left")),
+      y: parseInt($(carClicked).css("top")),
+      width: parseInt($(carClicked).css("width")),
+      height: parseInt($(carClicked).css("height"))
+    };
+
     var keyX = parseInt($(carClicked).css("left"));
     var keyY = parseInt($(carClicked).css("top"));
 
     if(!collisionDetected){
       switch(key.which){
-        case 38:
+        case 38: // up
           keyY -= 15;
           $(carClicked).addClass("car-up");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-left");
           $(carClicked).removeClass("car-down");
           break;
-        case 40:
+        case 40: // down
           keyY += 15;
           $(carClicked).addClass("car-down");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-left");
           $(carClicked).removeClass("car-up");
           break;
-        case 37:
+        case 37: // left
           keyX -= 15;
           $(carClicked).addClass("car-left");
           $(carClicked).removeClass("car-down");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-up");
           break;
-        case 39:
+        case 39: // right
           keyX += 15;
           $(carClicked).addClass("car-right");
           $(carClicked).removeClass("car-left");
@@ -152,42 +152,58 @@ $(function(){
     $(carClicked).css({"left": keyXString,"top":keyYString});
 
     // collision
-    var car = {
-      x: parseInt($(carClicked).css("left")),
-      y: parseInt($(carClicked).css("top")),
-      width: parseInt($(carClicked).css("width")),
-      height: parseInt($(carClicked).css("height"))
-    };
+    // var car = {
+    //   x: parseInt($(carClicked).css("left")),
+    //   y: parseInt($(carClicked).css("top")),
+    //   width: parseInt($(carClicked).css("width")),
+    //   height: parseInt($(carClicked).css("height"))
+    // };
 
-    var building = {
-      x: parseInt($(".building").css("left")),
-      y: parseInt($(".building").css("top")),
-      width: parseInt($(".building").css("width")),
-      height: parseInt($(".building").css("height"))
-    };
+    // var building = {
+    //   x: parseInt($(".building").css("left")),
+    //   y: parseInt($(".building").css("top")),
+    //   width: parseInt($(".building").css("width")),
+    //   height: parseInt($(".building").css("height"))
+    // };
 
     // console.log('car',car);
     // console.log('building',building);
 
-    if(
-      car.x < building.x + building.width &&
-      car.x + car.width > building.x &&
-      car.y < building.y + building.height &&
-      car.y + car.height > building.y
-    ) {
-      collisionDetected = true;
+    // if(
+    //   car.x < building.x + building.width &&
+    //   car.x + car.width > building.x &&
+    //   car.y < building.y + building.height &&
+    //   car.y + car.height > building.y
+    // ) {
+    //   collisionDetected = true;
+    // }
+
+    for(var kt = 0; kt < buildingArray.length; kt++){
+      // console.log('buildingArray[kt]',buildingArray[kt]);
+      buildingArray[kt].isCollided = function(){
+        var collided = car.x < this.x + this.width &&
+        car.x + car.width > this.x &&
+        car.y < this.y + this.height &&
+        car.y + car.height > this.y;
+
+        return collided;
+      };
+      if(buildingArray[kt].isCollided()){
+        collisionDetected = true;
+        break;
+      }
     }
 
     // debug console
-    $("#carX").html(car.x);
-    $("#carY").html(car.y);
-    $("#carWidth").html(car.width);
-    $("#carHeight").html(car.height);
-
-    $("#buildingX").html(building.x);
-    $("#buildingY").html(building.y);
-    $("#buildingWidth").html(building.width);
-    $("#buildingHeight").html(building.height);
+    // $("#carX").html(car.x);
+    // $("#carY").html(car.y);
+    // $("#carWidth").html(car.width);
+    // $("#carHeight").html(car.height);
+    //
+    // $("#buildingX").html(building.x);
+    // $("#buildingY").html(building.y);
+    // $("#buildingWidth").html(building.width);
+    // $("#buildingHeight").html(building.height);
   });
 
 
@@ -196,6 +212,14 @@ $(function(){
     this.y = y;
     this.width = width;
     this.height = height;
+    // this.isCollided = function(){
+    //   var collided = car.x < this.x + this.width &&
+    //   car.x + car.width > this.x &&
+    //   car.y < this.y + this.height &&
+    //   car.y + car.height > this.y;
+    //
+    //   return collided;
+    // }
   }
 
 
