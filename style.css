@@ -1,5 +1,5 @@
 body{
-  background: url('town.jpeg');
+  /*background: url('town.jpeg');*/
 }
 
 p{
@@ -55,7 +55,7 @@ p{
   display: none;
 }
 
-.keyBoxes{
+.cars{
   width: 66px;
   height: 66px;
   background-color: red;
@@ -79,4 +79,13 @@ p{
 
 .car-up{
   background: url(car.png) 0 -188px;
+}
+
+.building{
+  width: 200px;
+  height: 200px;
+  background-color: orchid;
+  position: absolute;
+  top: 450px;
+  left: 450px;
 }

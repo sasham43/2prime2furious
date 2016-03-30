@@ -55,52 +55,52 @@ $(function(){
 
 
   // keypress
-  var keyBoxClicked = '';
-  $(".keyBoxes").on('click',function(event){
+  var carClicked = '';
+  $(".cars").on('click',function(event){
     console.log(event.target);
-    keyBoxClicked = '#' + event.target.id;
-    console.log(keyBoxClicked);
+    carClicked = '#' + event.target.id;
+    console.log(carClicked);
   });
 
   $(document).keydown(function(key){
     // console.log(key.which);
-    var keyX = parseInt($(keyBoxClicked).css("left"));
-    var keyY = parseInt($(keyBoxClicked).css("top"));
+    var keyX = parseInt($(carClicked).css("left"));
+    var keyY = parseInt($(carClicked).css("top"));
     switch(key.which){
       case 38:
         keyY -= 15;
-        $(keyBoxClicked).addClass("car-up");
-        $(keyBoxClicked).removeClass("car-right");
-        $(keyBoxClicked).removeClass("car-left");
-        $(keyBoxClicked).removeClass("car-down");
+        $(carClicked).addClass("car-up");
+        $(carClicked).removeClass("car-right");
+        $(carClicked).removeClass("car-left");
+        $(carClicked).removeClass("car-down");
         break;
       case 40:
         keyY += 15;
-        $(keyBoxClicked).addClass("car-down");
-        $(keyBoxClicked).removeClass("car-right");
-        $(keyBoxClicked).removeClass("car-left");
-        $(keyBoxClicked).removeClass("car-up");
+        $(carClicked).addClass("car-down");
+        $(carClicked).removeClass("car-right");
+        $(carClicked).removeClass("car-left");
+        $(carClicked).removeClass("car-up");
         break;
       case 37:
         keyX -= 15;
-        $(keyBoxClicked).addClass("car-left");
-        $(keyBoxClicked).removeClass("car-down");
-        $(keyBoxClicked).removeClass("car-right");
-        $(keyBoxClicked).removeClass("car-up");
+        $(carClicked).addClass("car-left");
+        $(carClicked).removeClass("car-down");
+        $(carClicked).removeClass("car-right");
+        $(carClicked).removeClass("car-up");
         break;
       case 39:
         keyX += 15;
-        $(keyBoxClicked).addClass("car-right");
-        $(keyBoxClicked).removeClass("car-left");
-        $(keyBoxClicked).removeClass("car-down");
-        $(keyBoxClicked).removeClass("car-up");
+        $(carClicked).addClass("car-right");
+        $(carClicked).removeClass("car-left");
+        $(carClicked).removeClass("car-down");
+        $(carClicked).removeClass("car-up");
         break;
     }
     var keyXString = keyX + "px";
     var keyYString = keyY + "px";
     // console.log("keyXString",keyXString);
     // console.log("keyYString",keyYString);
-    $(keyBoxClicked).css({"left": keyXString,"top":keyYString});
+    $(carClicked).css({"left": keyXString,"top":keyYString});
   });
 
 
