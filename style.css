@@ -1,3 +1,7 @@
+body{
+  background: url('town.jpeg');
+}
+
 p{
   display: inline;
 }
@@ -52,10 +56,27 @@ p{
 }
 
 .keyBoxes{
-  width: 200px;
-  height: 200px;
+  width: 66px;
+  height: 66px;
   background-color: red;
   position: absolute;
   top: 0px;
   left: 0px;
+  background: url(car.png) 0 -66px;
+}
+
+.car-down{
+  background: url(car.png) 0 0;
+}
+
+.car-left{
+  background: url(car.png) 0 -66px;
+}
+
+.car-right{
+  background: url(car.png) 0 -132px;
+}
+
+.car-up{
+  background: url(car.png) 0 -188px;
 }

@@ -69,15 +69,31 @@ $(function(){
     switch(key.which){
       case 38:
         keyY -= 15;
+        $(keyBoxClicked).addClass("car-up");
+        $(keyBoxClicked).removeClass("car-right");
+        $(keyBoxClicked).removeClass("car-left");
+        $(keyBoxClicked).removeClass("car-down");
         break;
       case 40:
         keyY += 15;
+        $(keyBoxClicked).addClass("car-down");
+        $(keyBoxClicked).removeClass("car-right");
+        $(keyBoxClicked).removeClass("car-left");
+        $(keyBoxClicked).removeClass("car-up");
         break;
       case 37:
         keyX -= 15;
+        $(keyBoxClicked).addClass("car-left");
+        $(keyBoxClicked).removeClass("car-down");
+        $(keyBoxClicked).removeClass("car-right");
+        $(keyBoxClicked).removeClass("car-up");
         break;
       case 39:
         keyX += 15;
+        $(keyBoxClicked).addClass("car-right");
+        $(keyBoxClicked).removeClass("car-left");
+        $(keyBoxClicked).removeClass("car-down");
+        $(keyBoxClicked).removeClass("car-up");
         break;
     }
     var keyXString = keyX + "px";
