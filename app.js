@@ -32,14 +32,29 @@ $(function(){
     //console.log(carClicked);
   });
 
+  // click to move coins
+  var coinSelected = '';
+  $(document).on('click', ".coins", function(event){
+    coinSelected = '#' + event.target.id;
+    $(coinSelected).addClass("picked-up");
+  });
+
+  $(document).on('dblclick', ".coins", function(){
+    $(coinSelected).removeClass("picked-up");
+    coinSelected = '';
+  })
+
   // click to move buildings
   var buildingSelected = '';
   $(document).on('click',".building",function(event){
     buildingSelected = '#' + event.target.id;
+    $(buildingSelected).addClass("picked-up");
     console.log(buildingSelected);
+    // should add box shadow to look like it's picked up
   });
 
   $(document).on('dblclick', ".building" ,function(){
+    $(buildingSelected).removeClass("picked-up");
     buildingSelected = '';
   })
 
@@ -48,6 +63,7 @@ $(function(){
     var buildingY = event.pageY;
 
     $(buildingSelected).css({"left":(event.pageX)-50, "top":(event.pageY)-50});
+    $(coinSelected).css({"left":(event.pageX)-10, "top":(event.pageY)-10});
   });
 
   // console.log("buildingArray",buildingArray);
@@ -75,8 +91,8 @@ $(function(){
       buildingArray.push(tempBuilding);
     });
 
-    var keyX = parseInt($(carClicked).css("left"));
-    var keyY = parseInt($(carClicked).css("top"));
+    // var keyX = parseInt($(carClicked).css("left"));
+    // var keyY = parseInt($(carClicked).css("top"));
 
     // pull out speed and bounceback variables
     var speed = 15;
@@ -85,28 +101,28 @@ $(function(){
     if(!collisionDetected){
       switch(key.which){
         case 38: // up
-          keyY -= speed;
+          car.y-= speed;
           $(carClicked).addClass("car-up");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-left");
           $(carClicked).removeClass("car-down");
           break;
         case 40: // down
-          keyY += speed;
+          car.y += speed;
           $(carClicked).addClass("car-down");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-left");
           $(carClicked).removeClass("car-up");
           break;
         case 37: // left
-          keyX -= speed;
+          car.x -= speed;
           $(carClicked).addClass("car-left");
           $(carClicked).removeClass("car-down");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-up");
           break;
         case 39: // right
-          keyX += speed;
+          car.x += speed;
           $(carClicked).addClass("car-right");
           $(carClicked).removeClass("car-left");
           $(carClicked).removeClass("car-down");
@@ -116,26 +132,26 @@ $(function(){
     } else {
       switch(key.which){
         case 38:
-          keyY+=bounceback;
+          car.y+=bounceback;
           break;
         case 40:
-          keyY-=bounceback;
+          car.y-=bounceback;
           break;
         case 37:
-          keyX+=bounceback;
+          car.x+=bounceback;
           break;
         case 39:
-          keyX-=bounceback;
+          car.x-=bounceback;
           break;
       }
-      keyX-=5;
-      keyY-=5;
+      car.x-=5;
+      car.y-=5;
       collisionDetected = false;
     }
 
-    var keyXString = keyX + "px";
-    var keyYString = keyY + "px";
-    $(carClicked).css({"left": keyXString,"top":keyYString});
+    var carXString = car.x + "px";
+    var carYString = car.y + "px";
+    $(carClicked).css({"left": carXString,"top": carYString});
 
     // build coin object
     var coin = {

@@ -115,6 +115,10 @@ p{
   text-align: center;
 }
 
+.picked-up{
+  box-shadow: 10px 10px 5px #888888;
+}
+
 #coin{
   background-color: goldenrod;
   position: absolute;
