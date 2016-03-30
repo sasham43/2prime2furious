@@ -13,7 +13,13 @@ $(function(){
 //      cars
 ///////////////////////////////
 
+  // put cars at start
+  var startPosX = parseInt($(".car-start").css("left"));
+  var startPosY = parseInt($(".car-start").css("top"));
+  var carStartX = (startPosX+12) + "px";
+  var carStartY = (startPosY+12) + "px";
 
+  $(".cars").css({"top": carStartY,"left": carStartX});
 
   // keypress
   var carClicked = '#car1';
