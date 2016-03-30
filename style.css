@@ -86,6 +86,8 @@ p{
   height: 200px;
   background-color: orchid;
   position: absolute;
+  top: 0;
+  left: 700px;
 }
 
 .building:nth-child(1){
