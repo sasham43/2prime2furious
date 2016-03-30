@@ -55,53 +55,115 @@ $(function(){
 
 
   // keypress
-  var carClicked = '';
+  var carClicked = '#car1';
   $(".cars").on('click',function(event){
-    console.log(event.target);
+    //console.log(event.target);
     carClicked = '#' + event.target.id;
-    console.log(carClicked);
+    //console.log(carClicked);
   });
 
+  // car movement
+  var collisionDetected = false;
   $(document).keydown(function(key){
-    // console.log(key.which);
     var keyX = parseInt($(carClicked).css("left"));
     var keyY = parseInt($(carClicked).css("top"));
-    switch(key.which){
-      case 38:
-        keyY -= 15;
-        $(carClicked).addClass("car-up");
-        $(carClicked).removeClass("car-right");
-        $(carClicked).removeClass("car-left");
-        $(carClicked).removeClass("car-down");
-        break;
-      case 40:
-        keyY += 15;
-        $(carClicked).addClass("car-down");
-        $(carClicked).removeClass("car-right");
-        $(carClicked).removeClass("car-left");
-        $(carClicked).removeClass("car-up");
-        break;
-      case 37:
-        keyX -= 15;
-        $(carClicked).addClass("car-left");
-        $(carClicked).removeClass("car-down");
-        $(carClicked).removeClass("car-right");
-        $(carClicked).removeClass("car-up");
-        break;
-      case 39:
-        keyX += 15;
-        $(carClicked).addClass("car-right");
-        $(carClicked).removeClass("car-left");
-        $(carClicked).removeClass("car-down");
-        $(carClicked).removeClass("car-up");
-        break;
+
+    if(!collisionDetected){
+      switch(key.which){
+        case 38:
+          keyY -= 15;
+          $(carClicked).addClass("car-up");
+          $(carClicked).removeClass("car-right");
+          $(carClicked).removeClass("car-left");
+          $(carClicked).removeClass("car-down");
+          break;
+        case 40:
+          keyY += 15;
+          $(carClicked).addClass("car-down");
+          $(carClicked).removeClass("car-right");
+          $(carClicked).removeClass("car-left");
+          $(carClicked).removeClass("car-up");
+          break;
+        case 37:
+          keyX -= 15;
+          $(carClicked).addClass("car-left");
+          $(carClicked).removeClass("car-down");
+          $(carClicked).removeClass("car-right");
+          $(carClicked).removeClass("car-up");
+          break;
+        case 39:
+          keyX += 15;
+          $(carClicked).addClass("car-right");
+          $(carClicked).removeClass("car-left");
+          $(carClicked).removeClass("car-down");
+          $(carClicked).removeClass("car-up");
+          break;
+      }
+    } else {
+      switch(key.which){
+        case 38:
+          keyY+=5;
+          break;
+        case 40:
+          keyY-=5;
+          break;
+        case 37:
+          keyX+=5;
+          break;
+        case 39:
+          keyX-=5;
+          break;
+      }
+      keyX-=5;
+      keyY-=5;
+      collisionDetected = false;
     }
+
     var keyXString = keyX + "px";
     var keyYString = keyY + "px";
-    // console.log("keyXString",keyXString);
-    // console.log("keyYString",keyYString);
     $(carClicked).css({"left": keyXString,"top":keyYString});
+
+    // collision
+    var car = {
+      x: parseInt($(carClicked).css("left")),
+      y: parseInt($(carClicked).css("top")),
+      width: parseInt($(carClicked).css("width")),
+      height: parseInt($(carClicked).css("height"))
+    };
+
+    var building = {
+      x: parseInt($(".building").css("left")),
+      y: parseInt($(".building").css("top")),
+      width: parseInt($(".building").css("width")),
+      height: parseInt($(".building").css("height"))
+    };
+
+    // console.log('car',car);
+    // console.log('building',building);
+
+
+    if(
+      car.x < building.x + building.width &&
+      car.x + car.width > building.x &&
+      car.y < building.y + building.height &&
+      car.y + car.height > building.y
+    ) {
+      collisionDetected = true;
+    }
+
+    // debug console
+    $("#carX").html(car.x);
+    $("#carY").html(car.y);
+    $("#carWidth").html(car.width);
+    $("#carHeight").html(car.height);
+
+    $("#buildingX").html(building.x);
+    $("#buildingY").html(building.y);
+    $("#buildingWidth").html(building.width);
+    $("#buildingHeight").html(building.height);
   });
+
+
 
 
   // console.log(bX);
