@@ -9,12 +9,18 @@ $(function(){
 
 //  $(".box:first").add(".box:last").toggleClass("invisible");
 
+
+
 //////////////////////////////
 //      cars
 ///////////////////////////////
 
   // initialize coinCount
   var coinCount = 0;
+
+  // Initialize speed and bounceback variables
+  var speed = 15;
+  var bounceback = speed + 5;
 
   // put cars at start
   var startPosX = parseInt($(".car-start").css("left"));
@@ -36,25 +42,37 @@ $(function(){
   var coinSelected = '';
   $(document).on('click', ".coins", function(event){
     coinSelected = '#' + event.target.id;
-    $(coinSelected).addClass("picked-up");
+    $(coinSelected).addClass("coin-picked-up");
   });
 
   $(document).on('dblclick', ".coins", function(){
-    $(coinSelected).removeClass("picked-up");
+    $(coinSelected).removeClass("coin-picked-up");
     coinSelected = '';
+  })
+
+  // click to move powerups
+  var pwrUpSelected = '';
+  $(document).on('click',".pwrups", function(event){
+    pwrUpSelected = '#' + event.target.id;
+    $(pwrUpSelected).addClass("coin-picked-up");
+  })
+
+  $(document).on('dblclick', ".pwrups", function(){
+    $(pwrUpSelected).removeClass("coin-picked-up");
+    pwrUpSelected = '';
   })
 
   // click to move buildings
   var buildingSelected = '';
   $(document).on('click',".building",function(event){
     buildingSelected = '#' + event.target.id;
-    $(buildingSelected).addClass("picked-up");
+    $(buildingSelected).addClass("building-picked-up");
     console.log(buildingSelected);
     // should add box shadow to look like it's picked up
   });
 
   $(document).on('dblclick', ".building" ,function(){
-    $(buildingSelected).removeClass("picked-up");
+    $(buildingSelected).removeClass("building-picked-up");
     buildingSelected = '';
   })
 
@@ -64,6 +82,7 @@ $(function(){
 
     $(buildingSelected).css({"left":(event.pageX)-50, "top":(event.pageY)-50});
     $(coinSelected).css({"left":(event.pageX)-10, "top":(event.pageY)-10});
+    $(pwrUpSelected).css({"left":(event.pageX)-10, "top":(event.pageY)-10});
   });
 
   // car movement
@@ -101,17 +120,25 @@ $(function(){
       coinArray.push(tempCoin);
     });
 
+    var pwrUpArray = [];
+    $(".pwrups").each(function(index){
+      var tempX = parseInt($(this).css("left"));
+      var tempY = parseInt($(this).css("top"));
+      var tempWidth = parseInt($(this).css("width"));
+      var tempHeight = parseInt($(this).css("height"));
+      var tempID = "#pwrup" + (index+1);
+      var tempPwrUp = new PowerUp(tempX, tempY, tempWidth, tempHeight, tempID);
+
+      pwrUpArray.push(tempPwrUp);
+    });
+
     // var keyX = parseInt($(carClicked).css("left"));
     // var keyY = parseInt($(carClicked).css("top"));
-
-    // pull out speed and bounceback variables
-    var speed = 15;
-    var bounceback = 10;
 
     if(!collisionDetected){
       switch(key.which){
         case 38: // up
-          car.y-= speed;
+          car.y -= speed;
           $(carClicked).addClass("car-up");
           $(carClicked).removeClass("car-right");
           $(carClicked).removeClass("car-left");
@@ -140,22 +167,27 @@ $(function(){
           break;
       }
     } else {
+      console.log("collision");
       switch(key.which){
         case 38:
           car.y+=bounceback;
+          car.x+=bounceback-10;
           break;
         case 40:
           car.y-=bounceback;
+          car.x-=bounceback-10;
           break;
         case 37:
           car.x+=bounceback;
+          car.y+=bounceback-10;
           break;
         case 39:
           car.x-=bounceback;
+          car.y-=bounceback-10;
           break;
       }
-      car.x-=5;
-      car.y-=5;
+      //car.x-=5;
+      //car.y-=5;
       collisionDetected = false;
     }
 
@@ -191,6 +223,24 @@ $(function(){
         $(coinArray[ct].id).remove();
       }
     }
+
+    for(var pt = 0; pt < pwrUpArray.length; pt++){
+      pwrUpArray[pt].isCollected = function(){
+        var collected = car.x < this.x + this.width &&
+        car.x + car.width > this.x &&
+        car.y < this.y + this.height &&
+        car.y + car.height > this.y;
+
+        return collected;
+      }
+      if(pwrUpArray[pt].isCollected()){
+        speed+=10;
+        $("#speed").html(speed);
+        $(pwrUpArray[pt].id).remove();
+        console.log(speed);
+      }
+    }
+
     // var collide1 = (car.x < coin.x + coin.width);
     // var collide2 = (car.x + car.width > coin.x);
     // var collide3 = (car.y < coin.y + coin.height);
@@ -229,11 +279,19 @@ $(function(){
       $(".building-container").append("<div class=\"building\" id=\"building" + newID + "\"></div>");
     }
 
-    console.log(key.which);
+    // console.log('Which key?',key.which);
+    // create new coins with 'c'
     var numCoins = coinArray.length;
     var coinID = numCoins+1;
     if(key.which == 67){
       $(".coin-container").append("<div class=\"coins\" id=\"coin" + coinID + "\"></div>");
+    }
+
+    // create new powerups with 'p'
+    var numPwrUps = pwrUpArray.length;
+    var pwrUpID = numPwrUps+1;
+    if(key.which == 80){
+      $(".pwrup-container").append("<div class=\"pwrups\" id=\"pwrup" + pwrUpID + "\"></div>")
     }
 
     // debug console
@@ -265,19 +323,12 @@ $(function(){
     this.id = id;
   }
 
-
-
-
-  // console.log(bX);
-  // console.log(bY);
-
-  // jQuery documentation code
-  // $( document ).on( "mousemove", function( event ) {
-  //   // console.log(event.pageX);
-  //   // console.log(event.pageY);
-  // $( "#box1" ).text( "pageX: " + event.pageX + ", pageY: " + event.pageY );
-  // $("#box1").css({"left":event.pageX, "top":event.pageY});
-  // });
-
+  function PowerUp(x,y,width,height,id){
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.id = id;
+  }
 
 });

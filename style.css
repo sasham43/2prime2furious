@@ -62,23 +62,31 @@ p{
   position: absolute;
   top: 25px;
   left: 0px;
-  background: url(car.png) 0 -66px;
-}
-
-.car-down{
-  background: url(car.png) 0 0;
-}
-
-.car-left{
-  background: url(car.png) 0 -66px;
-}
-
-.car-right{
   background: url(car.png) 0 -132px;
 }
 
+.car-down{
+  background: url(car.png) -17px 0;
+  width: 32px;
+  height: 62px;
+}
+
+.car-left{
+  background: url(car.png) 0 -83px;
+  width: 62px;
+  height: 32px;
+}
+
+.car-right{
+  background: url(car.png) 0px -149px;
+  width: 62px;
+  height: 32px;
+}
+
 .car-up{
-  background: url(car.png) 0 -188px;
+  background: url(car.png) -17px -188px;
+  width: 32px;
+  height: 62px;
 }
 
 .building{
@@ -115,15 +123,32 @@ p{
   text-align: center;
 }
 
-.picked-up{
+.building-picked-up{
   box-shadow: 10px 10px 5px #888888;
 }
 
+.coin-picked-up{
+  box-shadow: 5px 5px 5px #888888;
+}
+
 .coins{
-  background-color: goldenrod;
+  /*background-color: goldenrod;*/
+  background: url('coin.png');
+  border-radius: 13px;
   position: absolute;
   width: 25px;
   height: 25px;
   top: 700px;
+  left: 700px;
+}
+
+.pwrups{
+  /*background-color: lime;*/
+  background: url('pwrup.png');
+  border-radius: 13px;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 100px;
   left: 700px;
 }
