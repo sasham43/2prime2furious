@@ -1,0 +1,4 @@
+# 2prime2furious
+
+## About
+This is a side project I developed in my spare time while attending Prime Digital Academy.  It was within the first week of classroom curriculum and we had just been introduced to jQuery.  I was playing around with different types of event listeners and I discovered the keypress events.  Once I figured out how to detect which key was being pressed, I immediately thought to build a game.  I used the basic collision detection section on the Mozilla Developer Network (https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection) to build buildings (pink blocks).  Once I had collision detection working, I added coins (to keep score) and powerups (to increase speed).  The buildings, coins, and powerups can all be moved by clicking the icon, then double-clicking to drop it.  Additional assets can be added to the game by pressing their respective keys. 
